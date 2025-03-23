@@ -1,0 +1,249 @@
+:root {
+ --primary-background:#5fcfd7;
+ font-size:25px;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.landing_page {
+  display: flex;
+  align-items: center;
+  background: var(--primary-background);
+  justify-content: center;
+  height: 100dvh;
+  width: 100vw;
+  position: relative; 
+}
+
+.landing_page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  height: 100%;
+  background: url("./assets/game-background-Photoroom.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity:0.5;
+  filter: blur(5px);
+  z-index: 0;
+
+}
+
+ .rgba{
+  background: #00000091;
+  height: 100dvh;
+  width: 100vw;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+} 
+
+button{
+  appearance: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  scale: 1;
+  z-index: 11;
+  position: relative;
+  transition: 0.2s ease-in-out;
+  z-index: 1000000000;
+}
+
+button:hover{
+  scale: 0.98;
+}
+
+.button_container button{
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size:1rem;
+  color: #ffffff;
+  font-weight: 600;
+  min-width: 200px;
+  margin: 0px 10px;
+  position: relative;
+ 
+}
+
+.button_container{
+  margin-top: 20px;
+}
+
+.button_container button:first-child{
+  background:#e50000;
+}
+
+.button_container button:last-child{
+  background:#00a7d5;
+}
+
+
+
+.landing_box{
+  max-width:600px;
+  width: 90%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.screen{
+  width: 100%;
+  height: 400px;
+  background: var(--primary-background);
+  border-radius: 10px;
+}
+
+.screen img{
+  width:100%;
+  height: 100%;
+  /* border-radius: 10px; */
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.leaderboard{
+  display: none;
+  height:100%;
+}
+
+.gameplay{
+  display: none;
+  overflow: hidden;
+  position: relative;
+  height:100%;
+justify-content: center;
+  padding-bottom:20px;
+  align-items: flex-end;
+  
+}
+
+
+.gameplay_background_image{
+  position: absolute;
+  bottom:0%;
+  left: 0%;
+  transition: 0.5s ease-in-out;
+  scale: 1.4;
+  opacity: 0.5;
+  border-bottom: 10px solid black;
+}
+
+.grass{
+  position: absolute;
+  bottom: -4%;
+  left: 0%;
+  z-index: 111;
+  display: flex;
+}
+
+.grass img{
+  margin-left: -20px;
+}
+
+.building{
+}
+
+.building_block{
+  width: 75px;
+  height: 90px;
+  z-index: 100;
+  position: relative;
+}
+
+
+#controller{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#building{
+  position: absolute;
+  top: 0%;
+  transition: 0.5s ease-in-out;
+  left: 0%;
+}
+
+
+
+.base {
+  width: 200px;
+  border-top: 5px solid gray;
+  margin: auto;
+  text-align: center;
+  position: absolute;
+  top: 0%;
+  padding: 0 0 30px;
+
+}
+
+.holder {
+  width: 30px;
+  height: 20px;
+  background: black;
+  margin: auto;
+  border-radius: 0 0 50% 50%;
+}
+
+.thread {
+  display: inline-block;
+  width: 2px;
+  height:100px;
+  background: black;
+  border-radius: 5px;
+  position: relative;
+  z-index: 1000;
+  transform-origin: 50% 0;
+  animation: moveIt 5s ease-in-out infinite;
+}
+
+.thread:after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: red;
+  border: 2px solid white;
+  top: -4.5px;
+  left: -3.5px;
+}
+
+.knob {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: -18px;
+  left: -4.5px;
+  border: 2px solid rgba(255, 255, 255, .5);
+  border-radius: 50%;
+  border-bottom: 2px solid transparent;
+}
+
+
+
+
+@keyframes moveIt {
+  0%, 100% {
+    transform: rotate(40deg);
+  }
+  50% {
+    transform: rotate(-40deg);
+  }
+}
+
+
