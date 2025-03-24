@@ -31,6 +31,14 @@
         <img id="intro" src="./assets/game-thumbnail-ua.PNG" alt="">
         <div id="leaderboard" class="leaderboard">leaderboard</div>
         <div id="gameplay" class="gameplay">
+
+          <div id="score_card">
+            <span class="current_score" id="current_score">0</span>
+            <div class="max_score">
+             <img src="https://cdn-icons-png.flaticon.com/256/6941/6941697.png" alt="">
+              <span>122</span>
+            </div>
+          </div>
           <!-- <audio autoplay loop>
             <source src="./assets//game-background-music-default.mp3" type="audio/mpeg">
           </audio> -->
@@ -44,18 +52,18 @@
 
           <div id="controller"></div>
 
-
-
           <div class="gameplay_background_image" id="gameplay_bg">
             <img src="./assets/game-background-Photoroom.png" alt="">
           </div>
 
+
+<!-- 
           <div class="grass">
             <img src="./assets/grass.png" alt="">
             <img src="./assets/grass.png" alt="">
             <img src="./assets/grass.png" alt="">
             <img src="./assets/grass.png" alt="">
-          </div>
+          </div> -->
 
 
           <div id="building">
@@ -72,6 +80,7 @@
 
         </div>
 
+       
 
       </div>
       <div class="button_container" id="button_container">
@@ -88,5 +97,9 @@
     <!-- <section class="gameplay"></section>
     <section class="leaderboard"></section> -->
     <script type="application/javascript" src="script.js"></script>
+    <script
+  src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+  type="module"
+></script>
   </body>
 </html>

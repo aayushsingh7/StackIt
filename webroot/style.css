@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Linear+A&display=swap");
+
+
 :root {
  --primary-background:#5fcfd7;
  font-size:25px;
@@ -7,6 +10,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Noto Sans Linear A", serif;
 }
 
 .landing_page {
@@ -233,6 +237,60 @@ justify-content: center;
   border-radius: 50%;
   border-bottom: 2px solid transparent;
 }
+
+
+#score_card{
+  position: fixed;
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  background: #333333;
+  left: 2%;
+  top: 2%;
+  z-index: 100;
+  border-radius: 5px;
+  min-width: 100px;
+  letter-spacing: 1px;
+}
+
+.max_score{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.current_score{
+  font-size: 0.8rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.max_score img{
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+
+.max_score{
+  font-size: 0.7rem;
+  color: #dede00;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.perfect {
+ position: absolute;
+ width: 270px;
+ height: 270px;
+}
+
+.perfect img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
 
 
 

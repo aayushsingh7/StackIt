@@ -32,6 +32,7 @@ class App {
     this.fall_distance = 550;
     this.building_container = document.getElementById("building")
     this.building_base = document.getElementById("base")
+    this.score_card = document.getElementById("current_score")
 
     this.play_btn.addEventListener("click",()=> {
       this.intro.style.display = "none"
@@ -72,7 +73,7 @@ class App {
       // block.style.left = "50%";
       // block.style.top = "5%"
       block.style.transition = '0.2s ease-in-out'
-      block.style.bottom =  "-10px"
+      block.style.top =  "10px"
       block.style.left = "-37px"
       block.classList.add("new-block")
       block.id =  `${current_block_id}`
@@ -92,12 +93,12 @@ class App {
 
 
 
-  const animateFall = (element, fallDistance, duration = 1) => {
+  const animateFall = (element,topPos,fallDistance, duration = 1) => {
     // Get the element's current position relative to the building_container
     const rect = element.getBoundingClientRect();
     const containerRect = this.building_container.getBoundingClientRect();
     const startX = rect.left - containerRect.left;
-    const startY = rect.top - containerRect.top;
+    const startY = topPos;
 
     // Get the current rotation angle
     const computedStyle = window.getComputedStyle(element);
@@ -112,7 +113,6 @@ class App {
     // Compute new position after the fall
     const newX = Math.abs(startX + fallDistance * Math.sin(angle)); // Adjust X based on rotation
     const newY = startY + fallDistance * Math.cos(angle); // Adjust Y based on rotation
-   console.log("NEW POSITION OF THE STACKED BLOCK",{newX,newY})
     // Apply the new position
     element.style.left = `${newX}px`;
     element.style.top = `${newY}px`;
@@ -156,18 +156,20 @@ class App {
       extra_pad = -30;
     }
 
-    console.log("OLD POSITION OF THE ABOUT TO STACK BLOCK",{oldX:rect.left,oldY:rect.top})
+
     cloneChild.style.left = `${rect.left + extra_pad}px`;
-    cloneChild.style.top = `${rect.top + 40 }px`;
+    if(this.total_blocks_stacked >= 4){
+      cloneChild.style.top = `-${(90 * (this.total_blocks_stacked - 3)) - 100}px`;
+    }else{
+      cloneChild.style.top = `${rect.top + 40 }px`;
+    }
     cloneChild.style.transform = `rotate(${final_transform_value}deg)`;
     this.building_container.prepend(cloneChild);
     cloneChild.style.transform = "rotate(0deg)";
 
     // Ensure distance is clamped to a minimum of 0
     let distance = 550 - (this.total_blocks_stacked * 90);
-    console.log("this.total_blocks_stacked", this.total_blocks_stacked, distance);
-
-    const { newX, newY } = animateFall(cloneChild, distance);
+    const { newX, newY } = animateFall(cloneChild, (rect.top+40), distance);
 
     setTimeout(() => {
       this.createNewBlock(this.total_blocks_stacked + 1);
@@ -179,13 +181,14 @@ class App {
         newX,
         newY,
         this.prev_block_location.x,
-        this.prev_block_location.allowed
+        this.prev_block_location.allowed,
       );
       if (!validPlay) {
         // Game over
-        window.alert("Game over!");
+        // window.alert("Game over!");
+        current_block_element.style.top = `${Math.abs(newY) + 1000}px`
+        current_block_element.style.transition = "1s ease-in-out"
       } else {
-        console.log("Valid play!");
         if (this.total_blocks_stacked >= 4) {
           this.gameplay_background.style.bottom = `-${this.bg_position + 10}%`;
           this.building_container.style.top = `${
@@ -198,17 +201,40 @@ class App {
 
     this.total_blocks_stacked += 1;
     this.prev_block_location = { x: rect.left, allowed: rect.left + 70 };
+    this.score_card.innerText = `${this.total_blocks_stacked}`
   });
 
   
-    this.isValidPlay = (newX,newY, prevX, allowedDistance)=> {
-      // console.log(this.prev_block_location, newX,newY)
-        let distance = Math.floor(Math.abs(newX-  prevX))
-        if(distance > 40) {
-          return false;
-        }
-        return true
+  this.isValidPlay = (newX, newY, prevX, allowedDistance) => {
+    let distance = Math.floor(Math.abs(newX - prevX));
+    if (distance > 40) {
+        return false;
     }
+    if (distance == 0) {
+        let div = document.createElement("div");
+        let img = document.createElement("img");
+
+        img.src = `./assets/perfect.gif?timestamp=${Date.now()}`;
+        img.alt = "Perfect";
+        
+        div.appendChild(img);
+        div.style.top = `${newY + 35}px`;
+        div.style.left = `${newX - 10}px`;
+        div.style.zIndex = "100";
+        div.style.position = "absolute";
+        div.classList.add("perfect");
+
+        this.building_container.append(div);
+        
+       let timeout =  setTimeout(() => {
+            this.building_container.removeChild(div);
+        }, 600);
+        clearTimeout(timeout)
+    }
+
+    return true;
+};
+
 
 
 
