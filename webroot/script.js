@@ -25,6 +25,7 @@ class App {
     
     this.leaderboard_btn = document.getElementById("leaderboard-btn")
     this.play_btn = document.getElementById("play-btn")
+    this.retry_btn = document.getElementById("retry-btn")
     this.exit_btn = document.getElementById("exit-btn")
     this.landing_box = document.getElementById("landing_box")
     this.gameplay_background = document.getElementById("gameplay_bg")
@@ -33,8 +34,21 @@ class App {
     this.building_container = document.getElementById("building")
     this.building_base = document.getElementById("base")
     this.score_card = document.getElementById("current_score")
+    this.cloud_container = document.getElementById("cloud_container")
+    this.game_over_bg = document.getElementById("game_over_bg")
+    this.prev_block_location = {x:0,allowed:0}
+    this.bg_position = 0;
+    let current_block_element;
 
     this.play_btn.addEventListener("click",()=> {
+       this.restartGame()
+      })
+
+    this.retry_btn.addEventListener("click", ()=> {
+      this.restartGame()
+    })
+
+    this.restartGame = ()=> {
       this.intro.style.display = "none"
       this.gameplay.style.display = "flex"
       this.leaderboard.style.display = "none"
@@ -43,8 +57,19 @@ class App {
       this.landing_box.style.width = "100%"
       this.button_container.style.display = "none"
       this.total_blocks_stacked = 0;
+      this.game_over_bg.style.display= "none"
+      this.building_container.innerHTML = "";
+      this.total_blocks_stacked = 0;
+      this.counter = 0;
+      this.score_card.innerText = 0;
+      this.cloud_container.innerHTML = ""
+      this.fall_distance = 550;
+      this.bg_position = 0;
+      this.building_container.style.top = "0%"
+      this.gameplay_background.style.bottom = "0%"
+      this.building_container.style.animation = "none"
       this.createNewBlock(0)
-    })
+    }
 
     this.leaderboard_btn.addEventListener("click",()=> {
       this.intro.style.display = "none"
@@ -53,18 +78,18 @@ class App {
       postWebViewMessage({type:'leaderboard'})
     })
 
-    // this.exit_btn.addEventListener("click",()=> {
-    //   this.screen.style.height = '400px'
-    //   this.intro.style.display = "flex"
-    //   this.gameplay.style.display = "none"
-    //   this.leaderboard.style.display = "none"
-    //   this.button_container.style.display = "block"
-    //   this.landing_box.style.maxWidth= "600px"
-    //   this.landing_box.style.width = "90%"
-    // })
+    this.exit_btn.addEventListener("click",()=> {
+      this.screen.style.height = '400px'
+      this.intro.style.display = "flex"
+      this.gameplay.style.display = "none"
+      this.leaderboard.style.display = "none"
+      this.button_container.style.display = "block"
+      this.landing_box.style.maxWidth= "600px"
+      this.landing_box.style.width = "90%"
+      this.game_over_bg.style.display= "none"
+    })
 
     this.thread = document.getElementById("swing_thread");
-    let current_block_element;
     this.createNewBlock = (total_stacked)=> {
       let current_block_id = `${Math.floor(Math.random() * 100000000000000)}-${this.gameplay.childNodes.length}`
       const block = document.createElement("figure");
@@ -136,10 +161,10 @@ class App {
 
 
   // Main Game Logic
-  this.bg_position = 0;
+  
   
   let isOccupied = false;
-  this.prev_block_location = {x:0,allowed:0}
+  
   this.controller.addEventListener("click", () => {
     const rect = current_block_element.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(this.thread);
@@ -194,6 +219,25 @@ class App {
           this.building_container.style.top = `${
             (this.total_blocks_stacked - 3) * 90
           }px`;
+          Array.from(this.cloud_container.children).forEach((node) => {
+            let getRect = node.getBoundingClientRect();
+            let newTop = getRect.top + 90; // Move down instead of up
+            node.style.top = `${newTop}px`;
+        });
+
+        if (this.total_blocks_stacked >= 10) {
+          this.building_container.style.animation = `high-swing 4s ease-in-out infinite`;
+      } else if (this.total_blocks_stacked >= 8) {
+          this.building_container.style.animation = `high-swing 8s ease-in-out infinite`;
+      } else if (this.total_blocks_stacked >= 6) {
+          this.building_container.style.animation = `mid-swing 8s ease-in-out infinite`;
+      } else if (this.total_blocks_stacked >= 4) {
+          this.building_container.style.animation = `mid-swing 10s ease-in-out infinite`;
+      } else if (this.total_blocks_stacked >= 2) {
+          this.building_container.style.animation = `mid-swing 15s ease-in-out infinite`;
+      }
+      
+        
           this.bg_position += 10;
         }
       }
@@ -207,7 +251,10 @@ class App {
   
   this.isValidPlay = (newX, newY, prevX, allowedDistance) => {
     let distance = Math.floor(Math.abs(newX - prevX));
-    if (distance > 40) {
+    if (distance > 40 && this.total_blocks_stacked > 0) {
+        setTimeout(()=> {
+          this.game_over_bg.style.display= "flex"
+        },200)
         return false;
     }
     if (distance == 0) {
@@ -229,18 +276,42 @@ class App {
        let timeout =  setTimeout(() => {
             this.building_container.removeChild(div);
         }, 600);
-        clearTimeout(timeout)
+       
     }
 
+    generateClouds(newY)
+    generateClouds(newY)
     return true;
+};
+
+let isLeft = true; // Toggle value to alternate positions
+const generateClouds = (newY) => {
+  let newCloud = document.createElement("div");
+  newCloud.classList.add("cloud");
+
+  let halfWidth = window.innerWidth / 2;
+  let leftPos = isLeft
+      ? Math.random() * (halfWidth - 20) // Left half
+      : halfWidth + Math.random() * (halfWidth - 20); // Right half
+
+  // Cloud appears after newY + 200px, within a range of +400px
+  let topPos = newY + 100 + Math.random() * 200; 
+
+  newCloud.style.left = `${leftPos}px`;
+  newCloud.style.top = `-${Math.abs(topPos)}px`;
+  console.log(`-${topPos}`)
+
+  newCloud.innerHTML = `
+      <img src="./assets/cloud-${Math.floor(Math.random() * 3) + 1}.png" alt="cloud" />
+  `;
+
+  this.cloud_container.append(newCloud);
+  isLeft = !isLeft;
 };
 
 
 
 
-
-
-    // When the Devvit app sends a message with `postMessage()`, this will be triggered
     addEventListener('message', this.#onMessage);
 
     // This event gets called when the web view is loaded

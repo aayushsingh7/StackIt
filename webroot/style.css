@@ -3,6 +3,7 @@
 
 :root {
  --primary-background:#5fcfd7;
+ --dark-background:#004c52;
  font-size:25px;
 }
 
@@ -16,7 +17,7 @@
 .landing_page {
   display: flex;
   align-items: center;
-  background: var(--primary-background);
+  background: var(--dark-background);
   justify-content: center;
   height: 100dvh;
   width: 100vw;
@@ -40,6 +41,16 @@
 
 }
 
+.cloud{
+  position: absolute;
+  height: 150px;
+  width: 150px;
+  transition: 0.5s ease-in-out;
+}
+
+.cloud img{
+  object-fit: contain !important;
+}
  .rgba{
   background: #00000091;
   height: 100dvh;
@@ -103,7 +114,7 @@ button:hover{
 .screen{
   width: 100%;
   height: 400px;
-  background: var(--primary-background);
+  background: var(--dark-background);
   border-radius: 10px;
 }
 
@@ -162,6 +173,7 @@ justify-content: center;
   height: 90px;
   z-index: 100;
   position: relative;
+  border: 3px solid #a40000;
 }
 
 
@@ -180,9 +192,66 @@ justify-content: center;
   top: 0%;
   transition: 0.5s ease-in-out;
   left: 0%;
+  transform-origin:bottom center;
+  animation-fill-mode: forwards;
+}
+
+#game_over_bg{
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.643);
+  height: 100dvh;
+  width:100vw;
+  display: none;
+}
+
+.game_over{
+  width: 100%;
+  max-width: 300px;
+  /* height: 200px; */
+  border-radius: 5px;
+  background: #333333;
+  padding:20px 0px 0px 0px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.game_over h3{
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
+.game_over p{
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.game_over p span{
+  color: #5fcfd7;
 }
 
 
+.game_over_btn{
+  display: flex;
+  margin-top: 40px;
+}
+
+.game_over_btn button{
+  appearance: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.8rem;
+  width: 100%;
+  font-weight: 600;
+  color: #ffffff;
+}
 
 .base {
   width: 200px;
@@ -305,3 +374,50 @@ justify-content: center;
 }
 
 
+
+@keyframes mid-swing {
+  0%{
+    left: 0%;
+  }
+  25%{
+    left: -1%;
+  }
+  50%{
+    left: 0%;
+  }
+  75%{
+    left: 1%;
+  }
+  100%{
+    left: 0%;
+  }
+}
+
+@keyframes high-swing {
+  0%{
+    left: 0%;
+    /* rotate:0deg; */
+    /* transform: rotateZ('0deg'); */
+    
+  }
+  25%{
+    left: -3%;
+    /* rotate: -2deg; */
+    /* transform: rotateZ('10deg'); */
+  }
+  /* 50%{
+    left: 0%; */
+  /* } */
+  75%{
+    left: 5%;
+    /* rotate: 2deg; */
+    /* transform: rotateZ('-10deg'); */
+    
+  }
+  100%{
+    left: 0%;
+    /* rotate: 0deg; */
+    /* transform: rotateZ('0deg'); */
+    
+  }
+}
