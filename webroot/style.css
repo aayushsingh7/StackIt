@@ -3,7 +3,8 @@
 
 :root {
  --primary-background:#5fcfd7;
- --dark-background:#004c52;
+ --dark-background:#00e3d7;
+ /* --dark-background:#002528;  */
  font-size:25px;
 }
 
@@ -50,7 +51,21 @@
 
 .cloud img{
   object-fit: contain !important;
+ filter: drop-shadow(5px 5px 10px #222);
+
+  /* mix-blend-mode: mul; */
 }
+
+@keyframes cloud_ani {
+  0%,100%{
+    transform: translateX(100px);
+  }
+  50%{
+    transform:translateX(-100px);
+  }
+}
+
+
  .rgba{
   background: #00000091;
   height: 100dvh;
@@ -116,6 +131,7 @@ button:hover{
   height: 400px;
   background: var(--dark-background);
   border-radius: 10px;
+  transition: 0.5s ease-in-out;
 }
 
 .screen img{
@@ -192,8 +208,26 @@ justify-content: center;
   top: 0%;
   transition: 0.5s ease-in-out;
   left: 0%;
-  transform-origin:bottom center;
-  animation-fill-mode: forwards;
+  /* transform-origin:bottom center; */
+}
+
+#moon{
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  /* background: white; */
+  width: 150px;
+  height: 150px;
+  transition: 0.5s ease-in-out;
+  opacity: 0;
+  display: none;
+}
+
+#moon img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(5px 3px 40px #f0f0f0);
 }
 
 #game_over_bg{
@@ -281,7 +315,7 @@ justify-content: center;
   position: relative;
   z-index: 1000;
   transform-origin: 50% 0;
-  animation: moveIt 5s ease-in-out infinite;
+  animation: moveIt 3s ease-in-out infinite;
 }
 
 .thread:after {
@@ -376,24 +410,44 @@ justify-content: center;
 
 
 @keyframes mid-swing {
-  0%{
-    left: 0%;
-  }
-  25%{
-    left: -1%;
+  0%,100%{
+    transform: translateX(50px);
   }
   50%{
-    left: 0%;
-  }
-  75%{
-    left: 1%;
-  }
-  100%{
-    left: 0%;
+    transform: translateX(-50px);
   }
 }
 
 @keyframes high-swing {
+  0%,100%{
+    left: -3%;
+    /* rotate:0deg; */
+    /* transform: rotateZ('0deg'); */
+    
+  }
+  50%{
+    left: 5%;
+    /* rotate: -2deg; */
+    /* transform: rotateZ('10deg'); */
+  }
+  /* 50%{
+    left: 0%; */
+  /* } */
+  /* 75%{ */
+    /* left: 5%; */
+    /* rotate: 2deg; */
+    /* transform: rotateZ('-10deg'); */
+    
+  /* } */
+  /* 100%{ */
+    /* left: 0%; */
+    /* rotate: 0deg; */
+    /* transform: rotateZ('0deg'); */
+    
+  /* } */
+}
+
+@keyframes mega-high-swing {
   0%{
     left: 0%;
     /* rotate:0deg; */
@@ -401,7 +455,7 @@ justify-content: center;
     
   }
   25%{
-    left: -3%;
+    left: -7%;
     /* rotate: -2deg; */
     /* transform: rotateZ('10deg'); */
   }
@@ -409,7 +463,7 @@ justify-content: center;
     left: 0%; */
   /* } */
   75%{
-    left: 5%;
+    left: 10%;
     /* rotate: 2deg; */
     /* transform: rotateZ('-10deg'); */
     
@@ -419,5 +473,116 @@ justify-content: center;
     /* rotate: 0deg; */
     /* transform: rotateZ('0deg'); */
     
+  }
+}
+
+.tenant{
+  position: absolute;
+  top: 10%;
+  left:70%;
+  z-index: 100;
+  width: 80px;
+  height: 80px;
+  transition: 2s ease-in-out;
+  animation: opacity-control 2s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.tenant img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes opacity-control {
+  0%{
+    opacity: 1;;
+  }
+  80%{
+    opacity: 0.9;
+  }
+  90%{
+    opacity: 0.8;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+
+/* #tornado{
+  height: 100dvh;
+  position: absolute;
+  z-index: 10;
+  bottom: -10%;;
+}
+
+#tornado img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+} */
+
+
+
+.rain_sec {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: none;
+  opacity: 0;
+  transition: 0.5s ease-in-out;
+  /* background-image: url( */
+/* https://media.geeksforgeeks.org/wp-content/uploads/20200828184536/download-200x200.png); */
+  background-size: cover;
+  background-position: center;
+  animation: color-change 10s linear infinite;
+  animation-delay: 1s;
+}
+
+/*adding rain img and making opacity 0*/
+.rain_sec:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(
+https://media.geeksforgeeks.org/wp-content/uploads/20200828184719/rain-300x300.png);
+  animation: rain 0.4s linear infinite;
+  opacity: 0;
+  /* z-index: 1000000000000000; */
+}
+
+/* just changing the position of image 
+of rain using keyframes*/
+@keyframes rain {
+  0% {
+      background-position: 0 0;
+      opacity: 1;
+  }
+
+  100% {
+      background-position: 8% 80%;
+      opacity: 1;
+  }
+}
+
+
+.lighting-effect {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  height: 100dvh;
+  animation: lighting 0.5s ease-in-out;
+}
+
+@keyframes lighting {
+  0%,100%{
+    background: rgba(255, 255, 255, 0);
+  }
+  50%{
+    background: rgba(255, 255, 255, 0.568);
   }
 }
