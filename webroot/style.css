@@ -205,9 +205,9 @@ justify-content: center;
 
 #building{
   position: absolute;
-  top: 0%;
+  /* top: 0%; */
   transition: 0.5s ease-in-out;
-  left: 0%;
+  /* left: 0%; */
   /* transform-origin:bottom center; */
 }
 
@@ -585,4 +585,91 @@ of rain using keyframes*/
   50%{
     background: rgba(255, 255, 255, 0.568);
   }
+}
+
+
+#building {
+    top: 0%;
+    left: 0%;
+    /* transform: translateX(-50%); */
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+}
+
+
+@keyframes fall_block_left {
+  0% {
+    rotate: 0deg;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  10% {
+    transform: translateY(-30px) rotate(-5deg);
+    opacity: 0.9;
+  }
+  20% {
+    transform: translateX(-50px) translateY(-10px) rotate(-10deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-70px) rotate(-15deg);
+    opacity: 0.6;
+  }
+  75% {
+    transform: translateX(-90px) translateY(500px) rotate(-20deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(-110px) translateY(1000px) rotate(-25deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fall_block_right {
+  0% {
+    rotate: 0deg;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  10% {
+    transform: translateY(-30px) rotate(5deg);
+    opacity: 0.9;
+  }
+  20% {
+    transform: translateX(50px) translateY(-10px) rotate(10deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(70px) rotate(15deg);
+    opacity: 0.6;
+  }
+  75% {
+    transform: translateX(90px) translateY(500px) rotate(20deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(110px) translateY(1000px) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+#reaction{
+  position: fixed;
+  right: 0%;
+  width: 150px;
+  height: 150px;
+  bottom: -100%;
+  transition: 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+
+.reaction_show{
+  bottom: 0% !important;
+}
+
+
+#reaction img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }

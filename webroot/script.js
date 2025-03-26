@@ -11,6 +11,7 @@ class App {
     this.decreaseButton = /** @type {HTMLButtonElement} */ (
       document.querySelector('#btn-decrease')
     );
+
     this.usernameLabel = /** @type {HTMLSpanElement} */ (document.querySelector('#username'));
     this.counterLabel = /** @type {HTMLSpanElement} */ (document.querySelector('#counter'));
     this.counter = 0;
@@ -22,7 +23,6 @@ class App {
     this.gameplay = document.getElementById("gameplay")
     this.screen =document.getElementById("screen")
     this.button_container = document.getElementById("button_container")
-    
     this.leaderboard_btn = document.getElementById("leaderboard-btn")
     this.play_btn = document.getElementById("play-btn")
     this.retry_btn = document.getElementById("retry-btn")
@@ -38,25 +38,47 @@ class App {
     this.game_over_bg = document.getElementById("game_over_bg")
     this.rain_section = document.getElementById("rain_sec")
     this.moon = document.getElementById("moon")
-    // this.prev_block_location = {x:0,allowed:0}
+    this.reaction = document.getElementById("reaction")
+    this.thread = document.getElementById("swing_thread");
     this.prev_element = null
     this.bg_position = 0;
-    let current_block_element;
+    this.current_block_element;
+
+
+    // audios
     let blockAudio = new Audio("./assets/block-2.mp3")
-    let prefectBlockAudio = new Audio("./assets/perfect-audio-1.mp3")
+    let prefectBlockAudio = new Audio("./assets/perfect.mp3")
+    let rainAudio = new Audio("./assets/rain-sound.mp3")
+    let thunderAudio = new Audio("./assets/thunder.mp3")
 
-    // setInterval(()=> {
-    //  let rect = this.prev_element?.getBoundingClientRect()
-    //  console.log("FREELY MOVING BLOCK", rect?.left, rect?.top)
-    // },500)
-
+    // buttons function
     this.play_btn.addEventListener("click",()=> {
        this.restartGame()
-      })
+    })
 
     this.retry_btn.addEventListener("click", ()=> {
       this.restartGame()
     })
+
+    this.leaderboard_btn.addEventListener("click",()=> {
+      this.intro.style.display = "none"
+      this.gameplay.style.display = "none"
+      this.leaderboard.style.display = "flex"
+      postWebViewMessage({type:'leaderboard'})
+    })
+
+    this.exit_btn.addEventListener("click",()=> {
+      this.screen.style.height = '400px'
+      this.intro.style.display = "flex"
+      this.gameplay.style.display = "none"
+      this.leaderboard.style.display = "none"
+      this.button_container.style.display = "block"
+      this.landing_box.style.maxWidth= "600px"
+      this.landing_box.style.width = "90%"
+      this.game_over_bg.style.display= "none"
+    })
+
+
 
     this.restartGame = ()=> {
       this.intro.style.display = "none"
@@ -79,30 +101,11 @@ class App {
       this.gameplay_background.style.bottom = "0%"
       this.building_container.style.animation = "none"
       this.createNewBlock(0)
-      this.triggerAnimation();
+      // this.triggerAnimation();
       this.prev_element = null
       this.moon.style.display="none"
     }
 
-    this.leaderboard_btn.addEventListener("click",()=> {
-      this.intro.style.display = "none"
-      this.gameplay.style.display = "none"
-      this.leaderboard.style.display = "flex"
-      postWebViewMessage({type:'leaderboard'})
-    })
-
-    this.exit_btn.addEventListener("click",()=> {
-      this.screen.style.height = '400px'
-      this.intro.style.display = "flex"
-      this.gameplay.style.display = "none"
-      this.leaderboard.style.display = "none"
-      this.button_container.style.display = "block"
-      this.landing_box.style.maxWidth= "600px"
-      this.landing_box.style.width = "90%"
-      this.game_over_bg.style.display= "none"
-    })
-
-    this.thread = document.getElementById("swing_thread");
     this.createNewBlock = (total_stacked)=> {
       let current_block_id = `${Math.floor(Math.random() * 100000000000000)}-${this.gameplay.childNodes.length}`
       const block = document.createElement("figure");
@@ -125,53 +128,67 @@ class App {
       img.alt = "Building Block";
     
       block.appendChild(img);
-      current_block_element = block;
+      this.current_block_element = block;
       this.thread.appendChild(block); // Append without using innerHTML
     }
 
+    let maxSwing = 0; 
+    let duration = 5;
 
-
-  // const animateFall = (element,topPos,fallDistance, prevElement) => {
-  //   // Get the element's current position relative to the building_container
-  //   const rect = element.getBoundingClientRect();
-  //   const prevElementRect = prevElement?.getBoundingClientRect()
-  //   const containerRect = this.building_container.getBoundingClientRect();
-  //   const startX = Math.floor(rect.left) - Math.floor(containerRect.left);
-  //   const startY = topPos;
-
-  //   // Get the current rotation angle
-  //   const computedStyle = window.getComputedStyle(element);
-  //   const transform = computedStyle.transform;
-  //   // // console.log(transform)
-  //   let angle = 0;
-  //   if (transform !== "none") {
-  //     const matrix = new DOMMatrix(transform);
-  //     angle = Math.atan2(matrix.b, matrix.a); // Extract rotation angle (radians)
-  //   }
-
-  //   // Compute new position after the fall
-  //   const newX = Math.floor(Math.abs(startX + fallDistance * Math.sin(angle))); // Adjust X based on rotation
-  //   const newY = Math.floor(startY + fallDistance * Math.cos(angle)); // Adjust Y based on rotation
-  //   // Apply the new position
-  //   element.style.left = `${newX}px`;
-  //   element.style.top = `${newY}px`;
+const animateBuildings = (buildings)=> {
+  if(this.total_blocks_stacked <4) return;
+    buildings.forEach((building, index) => {
+        // If the building already has an animation, continue from where it is
+        if (building.style.animation) return;
+        
+        maxSwing = Math.min(maxSwing, 40)
+        duration = Math.max(duration, 1)
+        console.log(maxSwing)
+        let buildingRect = building.getBoundingClientRect()
+        // Get the current position using .offsetLeft
+        let startPosition = Math.floor(building.left);
  
-  //   if(prevElement) {
-  //     // console.log("prev element is here")
-  //      return {newX, newY:Math.round(prevElementRect.top - 90)}
-  //   }else{
-  //     // console.log("prev element is not avaialble")
-  //     return { newX, newY };
-  //   }
-  // }
+        // Update lastEndPosition so the next building continues from here
+        // lastEndPosition = startPosition;
+
+        let keyframes = `
+            @keyframes swing_${index} {
+                0% { transform: translateX(0px); }
+                50% {transform:translateX(${maxSwing}px)}
+                100% { transform: translateX(-${maxSwing}px); }
+            }
+        `;
+
+        // Create and append the animation style
+        let styleTag = document.createElement("style");
+        styleTag.innerHTML = keyframes;
+        document.head.appendChild(styleTag);
+        
+        // Apply animation
+        setTimeout(() => {
+          if(building.style.animation) return;
+          building.style.animation = `swing_${index} ease-in-out ${duration}s infinite alternate`;
+        }, 200);
+      });
+      maxSwing += 0.2
+      duration -= 0.05
+}
+
+// Example: Function to handle dynamically added elements
+function updateBuildings() {
+    let cloneChildren = document.querySelectorAll(".block_added");
+    animateBuildings(cloneChildren);
+}
+
+
   const animateFall = (element, topPos, fallDistance, prevElement) => {
     const rect = element.getBoundingClientRect();
     const prevElementRect = this.prev_element?.getBoundingClientRect();
     const containerRect = this.building_container.getBoundingClientRect();
-    const startX = Math.floor(rect.left) - Math.floor(containerRect.left);
+    const startX = Math.floor(rect.left) ;
     const startY = topPos;
 
-    // console.log("PREVIOUS ELEMENT TOP", prevElementRect?.top)
+    // // console.log("PREVIOUS ELEMENT TOP", prevElementRect?.top)
 
     const computedStyle = window.getComputedStyle(element);
     const transform = computedStyle.transform;
@@ -221,17 +238,18 @@ class App {
 
   // Main Game Logic
   
-  
+  let prevX = 0;
   let isOccupied = false;
   
   this.controller.addEventListener("click", () => {
-    const rect = current_block_element.getBoundingClientRect();
+    const rect = this.current_block_element.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(this.thread);
     const transformValue = computedStyle.getPropertyValue("transform");
     const final_transform_value = getRotationAngle(transformValue);
 
-    this.thread.removeChild(current_block_element);
-    let cloneChild = current_block_element;
+    this.thread.removeChild(this.current_block_element);
+    let cloneChild = this.current_block_element;
+    this.current_block_element = cloneChild;
     let extra_pad = 0;
     let extra_pad_top = 0;
 
@@ -252,15 +270,17 @@ class App {
       cloneChild.style.top = `${Math.floor(rect.top) + 42 + extra_pad_top }px`;
     }
     cloneChild.style.transform = `rotate(${final_transform_value}deg)`;
+    cloneChild.classList.add("block_added")
     this.building_container.prepend(cloneChild);
     this.thread.innerHTML = ""
     extra_pad_top = 0;
     cloneChild.style.transform = "rotate(0deg)";
-
+    // let cloneChildrens = document.querySelectorAll(".building_block")
+    updateBuildings()
     // Ensure distance is clamped to a minimum of 0
     let distance = 550 - (this.total_blocks_stacked * 90);
     const { newX, newY } = animateFall(cloneChild, (Math.floor(rect.top)+42), distance, this.prev_element);
-
+   // console.log({newBlockLeft:newX})
     setTimeout(() => {
       this.createNewBlock(this.total_blocks_stacked + 1);
     },400);
@@ -277,8 +297,8 @@ class App {
       if (!validPlay) {
         // Game over
         // window.alert("Game over!");
-        // current_block_element.style.top = `${Math.abs(newY) + 1000}px`
-        // current_block_element.style.transition = "1s ease-in-out"
+        // this.current_block_element.style.top = `${Math.abs(newY) + 1000}px`
+        // this.current_block_element.style.transition = "1s ease-in-out"
       } else {
         if (this.total_blocks_stacked >= 4) {
 
@@ -295,10 +315,14 @@ class App {
 
         if(this.total_blocks_stacked >= 10 && this.total_blocks_stacked < 20){
           this.screen.style.background = "#003e3c";
+          rainAudio.loop = true;
+          rainAudio.play()
           this.rain_section.style.display = "block";
           this.rain_section.style.opacity = "1"
+          this.triggerAnimation()
         }else if(this.total_blocks_stacked >= 20 && this.total_blocks_stacked < 40){
           this.rain_section.style.opacity = "0";
+        
           setTimeout(()=> {
          this.rain_section.style.display = "none"
           },200)
@@ -332,19 +356,19 @@ class App {
         }
 
 //         const animation = this.building_container.getAnimations().find(anim => anim.animationName == "mid-swing");
-//    console.log(animation)
+//    // console.log(animation)
 // if (animation) {  
   
 
 //     if (this.total_blocks_stacked >= 6) {
 //         animation.updatePlaybackRate(4); // Increase speed
-//         console.log("change animation spee",animation.playbackRate)
+//         // console.log("change animation spee",animation.playbackRate)
 //     } else if (this.total_blocks_stacked >= 4) {
 //         animation.updatePlaybackRate(2);
-//         console.log("change animation spee",animation.playbackRate)
+//         // console.log("change animation spee",animation.playbackRate)
 //     } else if (this.total_blocks_stacked >= 2) {
 //         animation.playbackRate = 1;
-//         console.log("change animation spee",animation.playbackRate)
+//         // console.log("change animation spee",animation.playbackRate)
 //     }
 // } else {
 //     // Start the animation if it hasn't already started
@@ -367,26 +391,84 @@ class App {
 
     // this.building_container.style.top = `${newY}px`
     this.total_blocks_stacked += 1;
-    // console.log("THIS IS THE CLONE CHILD",cloneChild)
+    // // console.log("THIS IS THE CLONE CHILD",cloneChild)
    this.prev_element = cloneChild;
     this.score_card.innerText = `${this.total_blocks_stacked}`
+    let prevElementRect = this.prev_element?.getBoundingClientRect();
+    // console.log({prevLeft:Math.floor(prevElementRect.left)})
+    prevX = prevElementRect.left
   });
 
+  const moveElements = ()=> {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        let buildRect = this.building_container.getBoundingClientRect();
+        
+        if ((buildRect.top - 90) < 0) {
+          clearInterval(interval);
+          resolve(); // Resolve the Promise once the condition is met
+          return;
+        }
   
-  this.isValidPlay = (newX, newY, prevElement, allowedDistance) => {
-    // let d = this.building_container.getBoundingClientRect();
-    let prevElementRect = this.prev_element.getBoundingClientRect()
-    let build = this.building_container.getBoundingClientRect()
-    // let currElementRect = current_block_element.getBoundingClientRect()
-    let distance = Math.abs(Math.floor(prevElementRect.left) - newX);
-    console.log({prevX:Math.floor(prevElementRect.left), currX:newX, distance, buildX:Math.floor(build.left)})
-    if (distance >= 40 && this.total_blocks_stacked > 0 ) {
-        setTimeout(()=> {
-          this.game_over_bg.style.display= "flex"
-        },200)
-        return false;
-    }
-    if (distance <= 1) {
+        Array.from(this.cloud_container.children).forEach((node) => {
+          let getRect = node.getBoundingClientRect();
+          let newTop = Math.floor(getRect.top) - 90; // Move down instead of up
+          node.style.top = `${newTop}px`;
+        });
+  
+        this.gameplay_background.style.bottom = `${this.bg_position < 0 ? "" : "-"}${this.bg_position - 10}%`;
+        this.building_container.style.top = `${Math.floor(buildRect.top) - 90}px`;
+        this.bg_position -= 10;
+      }, 400);
+    });
+  }
+  
+ 
+  
+
+  this.isValidPlay = async(newX, newY, prevElement, allowedDistance) => {
+   let prevElemRect = this.prev_element.getBoundingClientRect();
+  let intersection = Math.abs(Math.floor(prevElemRect.left) - newX);
+  if(intersection > 35 && this.total_blocks_stacked > 0){
+    
+
+    const buildings = document.querySelectorAll(".building_block")
+let d = true; // Assuming you want to alternate animations
+let delay = 0;
+
+buildings.forEach((node, index) => {
+  console.log(index)
+  
+  // Clear existing animation first
+  node.style.animation = 'none';
+  
+  // Assign new animation
+  node.style.animation = d 
+    ? "fall_block_left 2s ease-in-out forwards" 
+    : "fall_block_right 2s ease-in-out forwards";
+  
+  // Use template literal correctly for delay
+  node.style.animationDelay = `${delay}s`;
+  
+  // Toggle direction and increment delay
+  d = !d;
+  delay += 0.4;
+})
+
+  // Usage
+  moveElements().then(() => {
+    this.game_over_bg.style.display = "flex"
+  });
+  return false;
+  }
+
+
+    if (intersection <= 1) {
+      let timout= setInterval(()=> {
+        this.reaction.classList.remove("reaction_show")
+        clearTimeout(timout)
+      }, 1000)
+      this.reaction.classList.add("reaction_show")
         let div = document.createElement("div");
         let img = document.createElement("img");
 
@@ -401,18 +483,17 @@ class App {
         div.classList.add("perfect");
 
         this.building_container.append(div);
-        // prefectBlockAudio.play()
         addTenant(newX,newY,this.total_blocks_stacked+1)
+        prefectBlockAudio.play()
        let timeout =  setTimeout(() => {
             this.building_container.removeChild(div);
-        }, 600);
+        }, 1000);
       }
       // }else{
         blockAudio.play();
 
       // }
       
-    
     generateClouds(newY)
     generateClouds(newY)
     return true;
@@ -466,7 +547,7 @@ const addTenant = (newX, newY, total_blocks) => {
  
     tenant1.style.top = tenant1Height;
     tenant2.style.top = tenant2Height;
-    tenant3.style.top = tenant3Height
+    tenant3.style.top = tenant3Height;
     
 
     // console.log({tenant1Height, tenant2Height, totalStacked:this.total_blocks_stacked, newY, condition:newY < 0 ? "-" : "+"})
@@ -511,13 +592,14 @@ this.triggerAnimation = ()=> {
   const element = document.querySelector(".lightening"); 
   
   if (element) {
+    thunderAudio.play();
     element.classList.add("lighting-effect");
 
     setTimeout(() => {
       element.classList.remove("lighting-effect");
     }, 500); 
   }
-  setTimeout(this.triggerAnimation, Math.random() * 4000 + 1000);
+  // setTimeout(this.triggerAnimation, Math.random() * 20000 + 4000);
 }
 
 
