@@ -4,8 +4,70 @@
 :root {
  --primary-background:#5fcfd7;
  --dark-background:#00e3d7;
+ --cloud-contrast:1;
+ --cloud-shadow-color:#222222;
  /* --dark-background:#002528;  */
  font-size:25px;
+}
+
+img{
+  image-rendering: crisp-edges;
+}
+
+.morning{
+  --primary-background:#5fcfd7;
+  --cloud-contrast:1;
+  --cloud-shadow-color:#222222;
+}
+
+.rain{
+  --primary-background:#007078;
+  --cloud-contrast:0.5;
+  --cloud-shadow-color:#222222;
+}
+
+.rain .rain_sec{
+  display: flex;
+  opacity: 1;
+}
+
+.night  {
+  --primary-background:#002a2d;
+  --cloud-contrast:1.5;
+  --cloud-shadow-color:#131313;
+}
+
+.space{
+  --primary-background:#000404;
+}
+
+.space #cloud_container{
+  display: none;
+}
+
+.space .space_sec{
+  opacity: 1;
+  display: flex;
+}
+
+
+.space_sec{
+  position: relative;
+  top: 0%;
+  left: 0%;
+  display: none;
+  opacity: 0;
+  width: 100%;
+  height: 100vh;
+  background: #111111;
+  background: url("./assets/space.jpg");
+  background-position: center;
+  background-size: cover;
+  transition: 0.5s ease-in-out;
+}
+
+.night #moon {
+  opacity: 1;
 }
 
 *{
@@ -15,6 +77,7 @@
   font-family: "Noto Sans Linear A", serif;
 }
 
+
 .landing_page {
   display: flex;
   align-items: center;
@@ -22,7 +85,16 @@
   justify-content: center;
   height: 100dvh;
   width: 100vw;
+  flex-direction: column;
   position: relative; 
+}
+
+#welcome{
+  color: #ffffff;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 100;
 }
 
 .landing_page::before {
@@ -39,7 +111,19 @@
   opacity:0.5;
   filter: blur(5px);
   z-index: 0;
+}
 
+.asteroid{
+  position: absolute;
+  height: 130px;
+  width: 130px;
+  transition: 0.5s ease-in-out;
+  z-index: 10;
+}
+
+.asteroid img{
+  object-fit: contain !important;
+ filter: drop-shadow(5px 5px 8px #000000);
 }
 
 .cloud{
@@ -47,16 +131,26 @@
   height: 150px;
   width: 150px;
   transition: 0.5s ease-in-out;
+  filter: contrast(var(--cloud-contrast));
 }
 
 .cloud img{
   object-fit: contain !important;
- filter: drop-shadow(5px 5px 10px #222);
+ filter: drop-shadow(5px 5px 1px var(--cloud-shadow-color));
 
   /* mix-blend-mode: mul; */
 }
 
 @keyframes cloud_ani {
+  0%,100%{
+    transform: translateX(100px);
+  }
+  50%{
+    transform:translateX(-100px);
+  }
+}
+
+@keyframes asteroid_ani {
   0%,100%{
     transform: translateX(100px);
   }
@@ -128,8 +222,11 @@ button:hover{
 
 .screen{
   width: 100%;
-  height: 400px;
-  background: var(--dark-background);
+  border-radius: 10px;
+  min-height: 200px;
+  overflow: hidden;
+  /* max-height: 400px; */
+  background: var(--primary-background);
   border-radius: 10px;
   transition: 0.5s ease-in-out;
 }
@@ -153,7 +250,7 @@ button:hover{
   position: relative;
   height:100%;
 justify-content: center;
-  padding-bottom:20px;
+  /* padding-bottom:20px; */
   align-items: flex-end;
   
 }
@@ -163,11 +260,25 @@ justify-content: center;
   position: absolute;
   bottom:0%;
   left: 0%;
+  width: 100%;
   transition: 0.5s ease-in-out;
-  scale: 1.4;
+  /* scale: 1; */
   opacity: 0.5;
   border-bottom: 10px solid black;
 }
+
+.gameplay_background_image img{
+  position: relative;
+  bottom: -5vw;
+}
+
+@media (max-width:600px) {
+  .gameplay_background_image img{
+    bottom: -2vw;
+  }
+}
+
+
 
 .grass{
   position: absolute;
@@ -189,9 +300,15 @@ justify-content: center;
   height: 90px;
   z-index: 100;
   position: relative;
-  border: 3px solid #a40000;
+  border-top: 2px solid #111111;
+  border-bottom: 2px solid #111111;
+  background:#111111;
 }
 
+
+.building_block img {
+  object-fit: contain !important;
+}
 
 #controller{
   height: 100%;
@@ -220,7 +337,6 @@ justify-content: center;
   height: 150px;
   transition: 0.5s ease-in-out;
   opacity: 0;
-  display: none;
 }
 
 #moon img{
@@ -246,18 +362,37 @@ justify-content: center;
 
 .game_over{
   width: 100%;
-  max-width: 300px;
+  max-width: 400px;
   /* height: 200px; */
   border-radius: 5px;
+  padding: 20px;
   background: #333333;
-  padding:20px 0px 0px 0px;
+  /* padding:20px 0px 0px 0px; */
   text-align: center;
   overflow: hidden;
+}
+
+#game_over,
+#disqualified,
+#high_score{
+display: none;
 }
 
 .game_over h3{
   color: #ffffff;
   font-size: 0.8rem;
+}
+
+.planet{
+  left: 30%;
+  position: absolute;
+  transition: 0.5s ease-in-out;
+}
+
+.planet img{
+  width: 1100px;
+  height: 1100px;
+  object-fit: contain;
 }
 
 .game_over p{
@@ -315,7 +450,7 @@ justify-content: center;
   position: relative;
   z-index: 1000;
   transform-origin: 50% 0;
-  animation: moveIt 3s ease-in-out infinite;
+  /* animation: moveIt 3s ease-in-out infinite; */
 }
 
 .thread:after {
@@ -404,6 +539,15 @@ justify-content: center;
   }
   50% {
     transform: rotate(-40deg);
+  }
+}
+
+@keyframes planet_ani {
+  0%{
+  rotate: 0deg;
+  }
+  100%{
+    rotate: 360deg;
   }
 }
 
@@ -547,8 +691,7 @@ justify-content: center;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url(
-https://media.geeksforgeeks.org/wp-content/uploads/20200828184719/rain-300x300.png);
+  background-image: url("./assets/rain-image.PNG");
   animation: rain 0.4s linear infinite;
   opacity: 0;
   /* z-index: 1000000000000000; */
@@ -672,4 +815,36 @@ of rain using keyframes*/
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.leaderboard{
+  padding: 10px;
+  background: #00a7d5;
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+
+.leaderboard_box{
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  background: #007078;
+  align-items: center;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+
+.leaderboard_box{
+  font-size: 0.6rem;
+  font-weight: 600;
+}
+
+@media (max-width:700px) {
+  .button_container button{
+    padding: 10px 15px;
+    font-size:0.7rem;
+    min-width: 100px;
+  }
 }

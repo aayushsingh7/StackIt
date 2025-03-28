@@ -11,20 +11,12 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- <h1>This is your page.html</h1>
-    <h3>Your username is <span id="username">Guest</span></h3>
-    <h3>Current counter is at: <span id="counter">0</span></h3>
-    <div class="button-container">
-      <button id="btn-increase">Increase Counter ⬆️</button>
-      <button id="btn-decrease">Decrease Counter ⬇️</button>
-    </div>
-    <h3>Last message from Devvit blocks:</h3>
-    <pre id="messageOutput"></pre> -->
     <section class="landing_page">
 
       <div class="rgba"></div>
 
       
+      <h2 id="welcome"></h2>
      <div class="landing_box" id="landing_box">
       <div id="reaction" >
         <img src="./assets/surp.png" alt="">
@@ -34,22 +26,51 @@
         <div id="moon">
           <img src="./assets/moon.png" alt="">
         </div>
-       
         <img id="intro" src="./assets/game-thumbnail-ua.PNG" alt="">
-        <div id="leaderboard" class="leaderboard">leaderboard</div>
+        <div id="leaderboard" class="leaderboard">
+           
+        </div>
         <div id="gameplay" class="gameplay">
 
           <div id="game_over_bg">
-            <div class="game_over">
-              <h3>Game Over😢</h3>
-              <div style="margin-top:30px;"><p>Your Score: <span>121</span></p>
-                <p>Total Perfect Stacked: <span>21</span></p></div>
+              <div class="game_over">
+              <div id="high_score">
+                <h3>🐱‍🏍 New High Score 🐱‍🏍</h3>
+              <div style="margin-top:30px;">
+                <p>Previous High Score: <span>121</span></p>
+                <div class="max_score" style="justify-content: center;">
+                  <img src="./assets/high-score.PNG" alt="">
+                   <span>New High Score: 122</span>
+                 </div>
+                <p><span>Congratulations ✨</span></p></div>
+              </div>
+
+              <div id="disqualified">
+                <h3>❌ Window Resize Detected ❌</h3>
+              <div style="margin-top:30px;">
+                <p>Your score is <span>saved</span> but you need to re-start the game as we don't support window resize during game</p>
+              </div>
+              </div>
+
+              <div id="game_over">
+                <h3>🤦‍♂️ Game Over 🤦‍♂️</h3>
+
+              <div style="margin-top:30px;">
+                <div class="max_score" style="justify-content: center;">
+                  <img src="./assets/high-score.PNG" alt="">
+                   <span>Max Score: 122</span>
+                 </div>
+                <p>Your Score: <span>121</span></p>
+                <p>Total Perfect Blocks: <span>21</span></p></div>
+              </div>
 
                 <div class="game_over_btn">
-                  <button style="background: #00d3e2;" id="retry-btn">Retry</button>
+                  <button style="background: #00d3e2;" id="retry-btn">Re-Start</button>
                   <button style="background-color: #555555;" id="exit-btn">Back</button>
                 </div>
             </div>
+
+
           </div>
 
           <div id="cloud_container">
@@ -59,8 +80,8 @@
           <div id="score_card">
             <span class="current_score" id="current_score">0</span>
             <div class="max_score">
-             <img src="https://cdn-icons-png.flaticon.com/256/6941/6941697.png" alt="">
-              <span>122</span>
+             <img src="./assets/high-score.PNG" alt="">
+              <span id="max_score"></span>
             </div>
           </div>
   
@@ -71,16 +92,20 @@
             </div>
           </div>
 
+          <section class="space_sec" id="space_con">
+             <div class="asteroid_con" id="asteroid_con">
+
+             </div>
+          </section>
+
           <!-- <div id="rain"> -->
             <section class="rain_sec" id="rain_sec">
-
               <section class="lightening"></section>
             </section>
-          <!-- </div> -->
-          <!-- <canvas id="canvas"></canvas> -->
-          <!-- <div id="tornado">
-            <img src="./assets/tornado.gif" alt="">
-          </div> -->
+
+            <div class="space">
+
+            </div>
 
           <div id="controller"></div>
 
@@ -96,9 +121,6 @@
           </div>
 
         </div>
-
-       
-      
 
       </div>
       <div class="button_container" id="button_container">
