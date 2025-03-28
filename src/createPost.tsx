@@ -8,11 +8,11 @@ Devvit.addMenuItem({
     const { reddit, ui } = context;
     const subreddit = await reddit.getCurrentSubreddit();
     const post = await reddit.submitPost({
-      title: 'StackIt - build the longest reddit tower',
+      title: 'StackIt – Build the Tallest Tower!',
       subredditName: subreddit.name,
       preview: (
         <vstack height="100%" width="100%" alignment="middle center">
-          <text size="large">Loading ...</text>
+          <text size="large">Loading StackIt...</text>
         </vstack>
       ),
     });

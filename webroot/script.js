@@ -10,12 +10,7 @@ class App {
     this.gameplay = document.getElementById("gameplay");
     this.screen = document.getElementById("screen");
     this.button_container = document.getElementById("button_container");
-    this.leaderboard_btn = document.getElementById("leaderboard-btn");
-    this.how_to_play_btn = document.getElementById("how-to-play-btn")
     this.how_to_play = document.getElementById("how-to-play")
-    this.play_btn = document.getElementById("play-btn");
-    this.retry_btn = document.getElementById("retry-btn");
-    this.exit_btn = document.getElementById("exit-btn");
     this.landing_box = document.getElementById("landing_box");
     this.gameplay_background = document.getElementById("gameplay_bg");
     this.controller = document.getElementById("controller");
@@ -35,6 +30,7 @@ class App {
     this.bg_position = 0;
     this.current_block_element;
     this.max_score = document.getElementById("max_score");
+   this.perfect_blocks_stacked = 0;
 
     this.game_over_box = document.getElementById("game_over");
     this.high_score_box = document.getElementById("high_score");
@@ -63,6 +59,15 @@ class App {
     let gameOverAudio = new Audio("./assets/game-over.mp3");
     let winnerAudio = new Audio("./assets/winner.mp3")
 
+    let maxSwing = 0;
+    let duration = 5;
+
+    this.leaderboard_btn = document.getElementById("leaderboard-btn");
+    this.how_to_play_btn = document.getElementById("how-to-play-btn")
+    this.play_btn = document.getElementById("play-btn");
+    this.retry_btn = document.getElementById("retry-btn");
+    this.exit_btn = document.getElementById("exit-btn");
+
     // buttons function
     this.play_btn.addEventListener("click", () => {
       this.restartGame();
@@ -86,23 +91,14 @@ class App {
       this.how_to_play_btn.disabled = !isActive;
     
       if (!isActive) {
+        this.welcome_message.innerText = "Leaderboard"
         this.how_to_play_btn.classList.remove("active");
         this.how_to_play_btn.innerText = "How To Play";
+      }else{
+        this.welcome_message.innerText = `Welcome ${this.username}`
       }
     
       postWebViewMessage({ type: "leaderboard" });
-    
-      this.leaderboard.innerHTML = this.leaderboard_data
-        .map((user, idx) => {
-          const medals = ["🥇", "🥈", "🥉"];
-          return `
-            <div class="leaderboard_box">
-              <h4>${idx + 1}. ${user.username} ${medals[idx] || ""}</h4>
-              <span>${user.highestScore}</span>
-            </div>
-          `;
-        })
-        .join("");
     });
     
     this.how_to_play_btn.addEventListener("click", () => {
@@ -118,8 +114,11 @@ class App {
       this.leaderboard_btn.disabled = !isActive;
     
       if (!isActive) {
+        this.welcome_message.innerText = "How To Play"
         this.leaderboard_btn.classList.remove("active");
         this.leaderboard_btn.innerText = "Leaderboard";
+      }else{
+        this.welcome_message.innerText = `Welcome ${this.username}`
       }
     });
     
@@ -158,16 +157,18 @@ class App {
       this.counter = 0;
       this.score_card.innerText = 0;
       this.bg_position = 0;
+      this.perfect_blocks_stacked = 0;
+
+      maxSwing = 0;
+      duration = 5;
+      
 
       this.welcome_message.style.display = "none";
       this.intro.style.display = "none";
       this.leaderboard.style.display = "none";
       this.button_container.style.display = "none";
-      this.game_over_bg.style.display = "none";
       this.building_container.style.animation = "none";
       this.game_over_bg.style.display = "none";
-      this.high_score_box.style.display = "none";
-      this.disqualified_box.style.display = "none";
 
       this.gameplay.style.display = "flex";
       this.screen.style.height = "100dvh";
@@ -213,8 +214,27 @@ class App {
       this.thread.appendChild(block);
     };
 
-    let maxSwing = 0;
-    let duration = 5;
+    const showGameOver  = (type, data = {})=> {
+      document.querySelectorAll(".game_message").forEach(el => el.classList.add("hidden"));
+      this.game_over_bg.style.display = "flex"
+    
+      if (type === "high_score") {
+        document.getElementById("high_score").classList.remove("hidden");
+        document.getElementById("prev_high_score").textContent = this.highest_score || 0;
+        document.getElementById("new_high_score").textContent = this.total_blocks_stacked || 0;
+      } 
+      else if (type === "disqualified") {
+        document.getElementById("disqualified").classList.remove("hidden");
+      } 
+      else if (type === "game_over") {
+        document.getElementById("game_over").classList.remove("hidden");
+        document.getElementById("max_score").textContent = this.highest_score || 0;
+        document.getElementById("your_score").textContent = this.total_blocks_stacked || 0;
+        document.getElementById("perfect_blocks").textContent = this.perfect_blocks_stacked || 0;
+      }
+    }
+  
+  
 
     // building block swinging animation
     const animateBuildings = (buildings) => {
@@ -262,8 +282,6 @@ class App {
       const startX = Math.floor(rect.left);
       const startY = topPos;
 
-      // // console.log("PREVIOUS ELEMENT TOP", prevElementRect?.top)
-
       const computedStyle = window.getComputedStyle(element);
       const transform = computedStyle.transform;
 
@@ -279,10 +297,10 @@ class App {
       let newY = 0;
 
       if (prevElement) {
-        if (this.total_blocks_stacked >= (window.innerWidth  < 600 ? 2 : 4)) {
+        if (this.total_blocks_stacked >= (window.innerHeight  < 600 ? 2 : 4)) {
           newY = 
             Math.round(prevElementRect.top) -
-            (this.total_blocks_stacked - (window.innerWidth  < 600 ? 1 : 3)) * 90;
+            (this.total_blocks_stacked - (window.innerHeight  < 600 ? 1 : 3)) * 90;
         } else {
           newY = Math.round(prevElementRect?.top) - 90;
         }
@@ -338,9 +356,9 @@ class App {
 
       cloneChild.style.left = `${Math.floor(rect.left) + extra_pad}px`;
       // block falling position
-      if (this.total_blocks_stacked >= (window.innerWidth  < 600 ? 2 : 4)) {
+      if (this.total_blocks_stacked >= (window.innerHeight  < 600 ? 2 : 4)) {
         cloneChild.style.top = `-${
-          90 * (this.total_blocks_stacked - (window.innerWidth  < 600 ? 1 : 3)) - 150
+          90 * (this.total_blocks_stacked - (window.innerHeight  < 600 ? 1 : 3)) - 150
         }px`;
       } else {
         cloneChild.style.top = `${Math.floor(rect.top) + 42 + extra_pad_top}px`;
@@ -495,8 +513,16 @@ class App {
 
     window.onresize = () => {
      if(this.total_blocks_stacked > 0) {
-      this.game_over_bg.style.display = "flex";
-      this.disqualified_box.style.display = "block";
+      showGameOver("disqualified");
+      if(this.total_blocks_stacked > this.highest_score) {
+        postWebViewMessage({
+          type: "updateHighScore",
+          data: {
+            username: this.username,
+            newHighScore: this.total_blocks_stacked,
+          },
+        });
+      }
       disqualifiedAudio.play();
      }
     };
@@ -515,8 +541,9 @@ class App {
         setTimeout(() => {
           this.pauseAllAudio();
           if (this.total_blocks_stacked > this.highest_score) {
-            this.game_over_bg.style.display = "flex";
-            this.high_score_box.style.display = "block";
+            // this.game_over_bg.style.display = "flex";
+            // this.high_score_box.style.display = "block";
+            showGameOver("high_score", { prevHighScore: this.highest_score, newHighScore: this.total_blocks_stacked })
             postWebViewMessage({
               type: "updateHighScore",
               data: {
@@ -526,8 +553,7 @@ class App {
             });
             highScoreAudio.play();
           } else {
-            this.game_over_bg.style.display = "flex";
-            this.game_over_box.style.display = "block";
+            showGameOver("game_over", { maxScore: this.highest_score, yourScore: this.total_blocks_stacked, perfectBlocks: this.perfect_blocks_stacked });
             gameOverAudio.play();
           }
         }, 600);
@@ -557,6 +583,7 @@ class App {
         this.building_container.append(div);
         addTenant(newX, newY, this.total_blocks_stacked + 1);
         prefectBlockAudio.play();
+        this.perfect_blocks_stacked += 1
         let timeout = setTimeout(() => {
           this.building_container.removeChild(div);
         }, 1000);
@@ -632,13 +659,13 @@ class App {
       setTimeout(() => {
         // const isTrue = this.total_blocks_stacked <= 4;
         const tenant1Height = `${
-          newY + (total_blocks - 4 < 0 ? 0 : (total_blocks - 4) * 90)
+          newY + (total_blocks - (window.innerHeight < 600 ? 2 : 4) < 0 ? 0 : (total_blocks - (window.innerHeight < 600 ? 2 : 4)) * 90)
         }px`;
         const tenant2Height = `${
-          newY + (total_blocks - 4 < 0 ? 0 : (total_blocks - 4) * 90)
+          newY + (total_blocks - (window.innerHeight < 600 ? 2 : 4) < 0 ? 0 : (total_blocks - (window.innerHeight < 600 ? 2 : 4)) * 90)
         }px`;
         const tenant3Height = `${
-          newY + (total_blocks - 4 < 0 ? 0 : (total_blocks - 4) * 90)
+          newY + (total_blocks - (window.innerHeight < 600 ? 2 : 4) < 0 ? 0 : (total_blocks - (window.innerHeight < 600 ? 2 : 4)) * 90)
         }px`;
 
         tenant1.style.top = tenant1Height;
@@ -766,7 +793,6 @@ class App {
     };
 
     addEventListener("message", this.#onMessage);
-    addEventListener("message", console.log("this.#onMessage triggered"));
     addEventListener("load", () => {
       postWebViewMessage({ type: "webViewReady" });
     });
@@ -785,17 +811,26 @@ class App {
     switch (message.type) {
       case "initialData": {
         const { username, highestScore } = message.data;
-        console.log(username, highestScore);
         this.username = username;
         this.welcome_message.innerText = `Welcome ${this.username}!`;
         this.max_score.innerText = highestScore || 0;
-        this.highest_score = highestScore;
+        this.highest_score = highestScore || 0;
         this.loading_game = false;
         break;
       }
       case "leaderboard_data": {
-        const { leaderboardData } = message.data;
-        this.leaderboard_data = leaderboardData;
+        const data = message.data;
+        this.leaderboard_data = data;
+        this.leaderboard.innerHTML = data.map((user, idx) => {
+          const medals = ["🥇", "🥈", "🥉"];
+          return `
+            <div class="leaderboard_box">
+              <h4>${idx + 1}. ${user.username} ${medals[idx] || ""}</h4>
+              <span>${user.highestScore}</span>
+            </div>
+          `;
+        })
+        .join("");
         break;
       }
       default:
@@ -812,7 +847,6 @@ class App {
  * @return {void}
  */
 function postWebViewMessage(msg) {
-  console.log("inside postWebViewMessage", msg);
   window.parent.postMessage(msg, "*");
 }
 

@@ -39,8 +39,6 @@ Devvit.addCustomPostType({
 
         switch (message.type) {
           case "webViewReady":
-            // console.log("----------------------------------------- web view ready --------------------------------------------");
-            // Send initial data to web view
             webView.postMessage({
               type: "initialData",
               data: {
@@ -85,10 +83,9 @@ Devvit.addCustomPostType({
             break;
 
           case "leaderboard":
-            try {
+            // try {
               // Use zRange to get the top scores from a sorted set
              let leaderboardData:any[] = await context.redis.zRange('leaderboard', 0, 350, { by: 'score' })
-              console.log("leaderbordData",leaderboardData)
               // Format the data for the web view
               const formattedLeaderboard = leaderboardData.map((entry) => ({
                 username: entry.member,
@@ -98,12 +95,9 @@ Devvit.addCustomPostType({
               // Send leaderboard back to web view
               webView.postMessage({
                 type: "leaderboard_data",
-                data: formattedLeaderboard,
+                data:formattedLeaderboard ,
               });
-            } catch (error) {
-              console.error("Error fetching leaderboard:", error);
-              // Inform the web view about the error
-            }
+            // } 
             break;
           default:
             console.error(`Unknown message type: ${message}`);

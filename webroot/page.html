@@ -14,7 +14,7 @@
     <section class="landing_page">
       <div class="rgba"></div>
 
-      <h2 id="welcome"></h2>
+      <h2 id="welcome">Please wait...</h2>
       <div class="landing_box" id="landing_box">
         <div id="reaction">
           <img src="./assets/surp.png" alt="" />
@@ -30,7 +30,8 @@
           <div id="leaderboard" class="leaderboard"></div>
 
           <div id="gameplay" class="gameplay">
-            <div id="game_over_bg">
+            
+            <!-- <div id="game_over_bg">
               <div class="game_over">
                 <div id="high_score">
                   <h3>🐱‍🏍 New High Score 🐱‍🏍</h3>
@@ -76,7 +77,46 @@
                   </button>
                 </div>
               </div>
+            </div> -->
+
+            <div id="game_over_bg">
+              <div class="game_over">
+                <div id="high_score" class="game_message hidden">
+                  <h3>🐱‍🏍 <span id="high_score_title">New High Score</span> 🐱‍🏍</h3>
+                  <div class="score_details">
+                    <p>Previous High Score: <span id="prev_high_score"></span></p>
+                    <div class="max_score">
+                      <img src="./assets/high-score.PNG" alt="High Score Image" />
+                      <span>New High Score: <span id="new_high_score"></span></span>
+                    </div>
+                    <p><span>Congratulations ✨</span></p>
+                  </div>
+                </div>
+            
+                <div id="disqualified" class="game_message hidden">
+                  <h3>❌ Window Resize Detected ❌</h3>
+                  <p>Your score is <span>saved</span>, but you need to restart the game as we don't support window resize during gameplay.</p>
+                </div>
+            
+                <div id="game_over" class="game_message hidden">
+                  <h3>🤦‍♂️ Game Over 🤦‍♂️</h3>
+                  <div class="score_details">
+                    <div class="max_score">
+                      <img src="./assets/high-score.PNG" alt="High Score Image" />
+                      <span>Max Score: <span id="max_score"></span></span>
+                    </div>
+                    <p>Your Score: <span id="your_score"></span></p>
+                    <p>Total Perfect Blocks: <span id="perfect_blocks"></span></p>
+                  </div>
+                </div>
+            
+                <div class="game_over_btn">
+                  <button class="btn retry-btn" id="retry-btn">Re-Start</button>
+                  <button class="btn exit-btn" id="exit-btn">Back</button>
+                </div>
+              </div>
             </div>
+            
 
             <div id="cloud_container"></div>
 
