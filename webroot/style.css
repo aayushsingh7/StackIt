@@ -14,6 +14,10 @@ img{
   image-rendering: crisp-edges;
 }
 
+body{
+  overflow: hidden;
+}
+
 .morning{
   --primary-background:#5fcfd7;
   --cloud-contrast:1;
@@ -186,12 +190,14 @@ button:hover{
 }
 
 .button_container button{
-  padding: 15px 30px;
+  padding: 10px 20px;
   border-radius: 10px;
-  font-size:1rem;
+  font-size:0.8rem;
   color: #ffffff;
   font-weight: 600;
-  min-width: 200px;
+  width: 100%;
+  min-width: 100px;
+  word-wrap: nowrap;
   margin: 0px 10px;
   position: relative;
  
@@ -199,14 +205,29 @@ button:hover{
 
 .button_container{
   margin-top: 20px;
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width:530px) {
+  .button_container{
+    flex-direction: column;
+  }
+  .button_container button{
+    margin: 5px 0px;
+  }
 }
 
 .button_container button:first-child{
   background:#e50000;
 }
 
-.button_container button:last-child{
+.button_container #leaderboard-btn{
   background:#00a7d5;
+}
+
+.button_container #how-to-play-btn{
+  background: #007fe1;
 }
 
 
@@ -223,6 +244,7 @@ button:hover{
 .screen{
   width: 100%;
   border-radius: 10px;
+  position: relative;
   min-height: 200px;
   overflow: hidden;
   /* max-height: 400px; */
@@ -450,7 +472,7 @@ display: none;
   position: relative;
   z-index: 1000;
   transform-origin: 50% 0;
-  /* animation: moveIt 3s ease-in-out infinite; */
+  animation: moveIt 3s ease-in-out infinite;
 }
 
 .thread:after {
@@ -846,5 +868,206 @@ of rain using keyframes*/
     padding: 10px 15px;
     font-size:0.7rem;
     min-width: 100px;
+  }
+}
+
+
+
+label {
+	background: #444;
+	color: #fff;
+	transition: transform 400ms ease-out;
+	display: inline-block;
+  min-height: 100%;
+	position: relative;
+	z-index: 1;
+	text-align: center;
+}
+
+form {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+  width: 100%;
+  height: 100%;
+	white-space: nowrap;
+}
+input {
+	position: absolute;
+}
+
+.keys {
+	position: fixed;
+	z-index: 10;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 1rem;
+	color: #fff;
+	text-align: center;
+	transition: all 300ms linear;
+	opacity: 0;
+}
+
+input:focus ~ .keys {
+	opacity: 0.8;
+}
+
+input:nth-of-type(1):checked ~ label:nth-of-type(1), 
+input:nth-of-type(2):checked ~ label:nth-of-type(2),
+input:nth-of-type(3):checked ~ label:nth-of-type(3){
+   z-index: 0;
+}
+
+input:nth-of-type(1):checked ~ label {
+	transform: translate3d(0, 0, 0);
+}
+
+input:nth-of-type(2):checked ~ label {
+	transform: translate3d(-100%, 0, 0);
+}
+
+input:nth-of-type(3):checked ~ label {
+	transform: translate3d(-202%, 0, 0);
+}
+
+
+label {
+	background: #444;
+	background-size: cover;
+	font-size: 3rem;
+  width: 100%;
+  height: 100%;
+}
+
+label:before,
+label:after {
+	color: white;
+	display: block;
+	background: rgba(255,255,255,0.2);
+	position: absolute;
+	padding: 1rem;
+	font-size: 3rem;
+	height: 10rem;
+	vertical-align: middle;
+	line-height: 10rem;
+	top: 50%;
+	transform: translate3d(0, -50%, 0);
+	cursor: pointer;
+}
+
+label:before {
+	content: "\276D";
+	right: 100%;
+	border-top-left-radius: 50%;
+	border-bottom-left-radius: 50%;
+}
+
+label:after {
+	content: "\276C";
+	left: 100%;
+	border-top-right-radius: 50%;
+	border-bottom-right-radius: 50%;
+}
+
+#how-to-play{
+  width: 100%;
+  height: 400px;
+  /* height: 400px; */
+  display: none;
+  /* position: relative;; */
+}
+
+#how-to-play img{
+  object-fit: cover !important;
+}
+
+.winner{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100099
+  /* background: black; */
+}
+
+.topside{
+  width: 100%;
+  height: 50%;
+  top:-100%;
+  background: #002a2d;
+  position: absolute;
+  animation:topside_ani 2s ease-in-out forwards;
+  /* border-bottom: 3px solid #00e3d7; */
+}
+
+.bottomside{
+  width: 100%;
+  height: 50%;
+  bottom: 0%;
+  background: #002a2d;
+  position: absolute;
+  animation:bottomside_ani 2s ease-in-out forwards;
+  /* border-top: 3px solid #00e3d7; */
+}
+
+.winner_content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    z-index: 10; 
+    opacity: 0;
+    animation: winner_ani 2s ease-in-out forwards;
+    animation-delay: 2s;
+   /* width: 100%; */
+}
+
+.winner_content h2{
+  color: #00e3d7;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.winner_content p{
+  color: #ffffff;
+  font-size: 0.7rem;
+}
+
+.winner_content span{
+  font-weight: 600;
+  color: #00e3d7;
+}
+
+.winner_content img{
+  border-radius: 10px;
+  margin: 20px 0px;
+}
+
+@keyframes topside_ani {
+  0%{
+   top: -100%;
+  }
+  100%{
+    top: 0%;
+  }
+}
+
+@keyframes bottomside_ani {
+  0%{
+   bottom: -100%;
+  }
+  100%{
+    bottom: 0%;
+  }
+}
+
+@keyframes winner_ani {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
   }
 }

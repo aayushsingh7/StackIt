@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta
@@ -12,134 +12,137 @@
   </head>
   <body>
     <section class="landing_page">
-
       <div class="rgba"></div>
 
-      
       <h2 id="welcome"></h2>
-     <div class="landing_box" id="landing_box">
-      <div id="reaction" >
-        <img src="./assets/surp.png" alt="">
-      </div>
-      <div class="screen" id="screen">
-
-        <div id="moon">
-          <img src="./assets/moon.png" alt="">
+      <div class="landing_box" id="landing_box">
+        <div id="reaction">
+          <img src="./assets/surp.png" alt="" />
         </div>
-        <img id="intro" src="./assets/game-thumbnail-ua.PNG" alt="">
-        <div id="leaderboard" class="leaderboard">
-           
-        </div>
-        <div id="gameplay" class="gameplay">
+        <div class="screen" id="screen">
 
-          <div id="game_over_bg">
+          <div id="moon">
+            <img src="./assets/moon.png" alt="" />
+          </div>
+
+          <img id="intro" src="./assets/game-thumbnail-ua.PNG" alt="" />
+          
+          <div id="leaderboard" class="leaderboard"></div>
+
+          <div id="gameplay" class="gameplay">
+            <div id="game_over_bg">
               <div class="game_over">
-              <div id="high_score">
-                <h3>🐱‍🏍 New High Score 🐱‍🏍</h3>
-              <div style="margin-top:30px;">
-                <p>Previous High Score: <span>121</span></p>
-                <div class="max_score" style="justify-content: center;">
-                  <img src="./assets/high-score.PNG" alt="">
-                   <span>New High Score: 122</span>
-                 </div>
-                <p><span>Congratulations ✨</span></p></div>
-              </div>
+                <div id="high_score">
+                  <h3>🐱‍🏍 New High Score 🐱‍🏍</h3>
+                  <div style="margin-top: 30px">
+                    <p>Previous High Score: <span>121</span></p>
+                    <div class="max_score" style="justify-content: center">
+                      <img src="./assets/high-score.PNG" alt="" />
+                      <span>New High Score: 122</span>
+                    </div>
+                    <p><span>Congratulations ✨</span></p>
+                  </div>
+                </div>
 
-              <div id="disqualified">
-                <h3>❌ Window Resize Detected ❌</h3>
-              <div style="margin-top:30px;">
-                <p>Your score is <span>saved</span> but you need to re-start the game as we don't support window resize during game</p>
-              </div>
-              </div>
+                <div id="disqualified">
+                  <h3>❌ Window Resize Detected ❌</h3>
+                  <div style="margin-top: 30px">
+                    <p>
+                      Your score is <span>saved</span> but you need to re-start
+                      the game as we don't support window resize during game
+                    </p>
+                  </div>
+                </div>
 
-              <div id="game_over">
-                <h3>🤦‍♂️ Game Over 🤦‍♂️</h3>
+                <div id="game_over">
+                  <h3>🤦‍♂️ Game Over 🤦‍♂️</h3>
 
-              <div style="margin-top:30px;">
-                <div class="max_score" style="justify-content: center;">
-                  <img src="./assets/high-score.PNG" alt="">
-                   <span>Max Score: 122</span>
-                 </div>
-                <p>Your Score: <span>121</span></p>
-                <p>Total Perfect Blocks: <span>21</span></p></div>
-              </div>
+                  <div style="margin-top: 30px">
+                    <div class="max_score" style="justify-content: center">
+                      <img src="./assets/high-score.PNG" alt="" />
+                      <span>Max Score: 122</span>
+                    </div>
+                    <p>Your Score: <span>121</span></p>
+                    <p>Total Perfect Blocks: <span>21</span></p>
+                  </div>
+                </div>
 
                 <div class="game_over_btn">
-                  <button style="background: #00d3e2;" id="retry-btn">Re-Start</button>
-                  <button style="background-color: #555555;" id="exit-btn">Back</button>
+                  <button style="background: #00a5a5" id="retry-btn">
+                    Re-Start
+                  </button>
+                  <button style="background-color: #555555" id="exit-btn">
+                    Back
+                  </button>
                 </div>
+              </div>
             </div>
 
+            <div id="cloud_container"></div>
 
-          </div>
-
-          <div id="cloud_container">
-
-          </div>
-
-          <div id="score_card">
-            <span class="current_score" id="current_score">0</span>
-            <div class="max_score">
-             <img src="./assets/high-score.PNG" alt="">
-              <span id="max_score"></span>
+            <div id="score_card">
+              <span class="current_score" id="current_score">0</span>
+              <div class="max_score">
+                <img src="./assets/high-score.PNG" alt="" />
+                <span id="max_score"></span>
+              </div>
             </div>
-          </div>
-  
-          <div class="base" id="base">
-            <div class="holder"></div>
-            <div class="thread" id="swing_thread">
-              <div class="knob"></div>
+
+            <div class="base" id="base">
+              <div class="holder"></div>
+              <div class="thread" id="swing_thread">
+                <div class="knob"></div>
+              </div>
             </div>
-          </div>
 
-          <section class="space_sec" id="space_con">
-             <div class="asteroid_con" id="asteroid_con">
+            <section class="space_sec" id="space_con">
+              <div class="asteroid_con" id="asteroid_con"></div>
+            </section>
 
-             </div>
-          </section>
-
-          <!-- <div id="rain"> -->
+            <!-- <div id="rain"> -->
             <section class="rain_sec" id="rain_sec">
               <section class="lightening"></section>
             </section>
 
-            <div class="space">
+            <div class="space"></div>
 
+            <div id="controller"></div>
+
+            <div class="gameplay_background_image" id="gameplay_bg">
+              <img src="./assets/game-background-Photoroom.png" alt="" />
             </div>
 
-          <div id="controller"></div>
-
-          <div class="gameplay_background_image" id="gameplay_bg">
-            <img src="./assets/game-background-Photoroom.png" alt="">
+            <div id="building"></div>
           </div>
 
-             
+          <div id="how-to-play">
+            <form>
+
+              <input type="radio" name="fancy" autofocus value="tutorial-1" id="tutorial-1" />
+              <input type="radio" name="fancy" value="tutorial-2" id="tutorial-2" />
+              <input type="radio" name="fancy" value="tutorial-3" id="tutorial-3" />
+              <label for="tutorial-1"><img src="./assets/tutorial/tutorial-1.png" alt=""></label>
+              <label for="tutorial-2"><img src="./assets/tutorial/tutorial-2.png" alt=""></label>
+              <label for="tutorial-3"><img src="./assets/tutorial/tutorial-3.png" alt=""></label>
         
-
-          <div id="building">
-
+              <div class="keys">Use left and right keys to navigate</div>
+          </form>
           </div>
+        
+        </div>
 
+        <div class="button_container" id="button_container">
+          <button id="play-btn">Start Game</button>
+          <button id="leaderboard-btn">LeaderBoard</button>
+          <button id="how-to-play-btn">How To Play</button>
         </div>
 
       </div>
-      <div class="button_container" id="button_container">
-        <button id="play-btn">Play</button>
-        <button id="leaderboard-btn">LeaderBoard</button>
-      </div>
-     </div>
-      <!-- <div class="building">
-        <div class="building_block"><img src="./assets/flat-block.png" alt=""></div>
-        <div class="building_block"><img src="./assets/flat-base.png" alt=""></div>
-      </div> -->
-
     </section>
-    <!-- <section class="gameplay"></section>
-    <section class="leaderboard"></section> -->
     <script type="application/javascript" src="script.js"></script>
     <script
-  src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
-  type="module"
-></script>
+      src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
   </body>
 </html>
